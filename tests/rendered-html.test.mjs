@@ -63,7 +63,7 @@ test("server-renders the scroll telemetry as non-interactive decoration", async 
   const html = await response.text();
   assert.match(html, /<div[^>]+aria-hidden="true"[^>]+class="scroll-progress"/i);
   assert.match(html, /data-section="01"[^>]+data-total="00"/i);
-  assert.match(html, /og-redesign\.png/i);
+  assert.match(html, /og-monochrome\.png/i);
   assert.match(html, /Research\. Validate\. Execute\./i);
 });
 
@@ -76,9 +76,9 @@ test("server-renders authentic app UI showcases without embedding the app runtim
   );
   const html = await response.text();
   assert.match(html, /QuantStation Research workspace interface/i);
-  assert.match(html, /Desktop online[\s\S]*Run Context[\s\S]*Project Source/i);
+  assert.match(html, /Quant workspace[\s\S]*Workspaces[\s\S]*Desktop online[\s\S]*Quant trader[\s\S]*Run Context[\s\S]*Project Source/i);
   assert.match(html, /Collapse rail[\s\S]*Run Context[\s\S]*Compute Backend[\s\S]*Backtest Control[\s\S]*Out-of-sample equity[\s\S]*\+\$42,840[\s\S]*Completed[\s\S]*Backtest Queue[\s\S]*1,284 trades/i);
-  assert.match(html, /Order entry[\s\S]*Orders &amp; fills[\s\S]*Risk rules[\s\S]*Smart orders[\s\S]*Alerts[\s\S]*Hotkeys[\s\S]*Strategy session[\s\S]*Recordings[\s\S]*Chart 01[\s\S]*15 min[\s\S]*Market depth/i);
+  assert.match(html, /Chart 01[\s\S]*15 min[\s\S]*Market depth[\s\S]*Order entry[\s\S]*Orders &amp; fills[\s\S]*Risk rules[\s\S]*Smart orders[\s\S]*Alerts[\s\S]*Hotkeys[\s\S]*Strategy session[\s\S]*Recordings/i);
   assert.match(html, /Report library[\s\S]*EMA Cross v1[\s\S]*Import JSON[\s\S]*Run quality/i);
   assert.match(html, /Data[\s\S]*Strategy[\s\S]*Backtest[\s\S]*Pipeline[\s\S]*Validate[\s\S]*Results[\s\S]*AI Assistant/i);
   assert.match(html, /Periodical analysis[\s\S]*Settings &amp; diagnostics[\s\S]*Raw JSON[\s\S]*Prop simulation/i);

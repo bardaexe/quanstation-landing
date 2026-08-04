@@ -33,10 +33,11 @@ function AppSurface({
       <div className="qs-app-frame" aria-hidden="true">
         <aside className="qs-app-rail">
           <div className="qs-app-brand">
-            <span className="qs-app-brand-mark"><i /><i /><i /></span>
-            <strong>QuantStation</strong>
+            <span className="qs-app-brand-icon"><span className="qs-app-brand-mark" /></span>
+            <span className="qs-app-brand-copy"><strong>QuantStation</strong><small>Quant workspace</small></span>
           </div>
           <nav className="qs-app-navigation">
+            <small>Workspaces</small>
             {workspaceNavigation.map((item) => (
               <span className={`qs-app-nav-item${item.label === workspace ? " is-active" : ""}`} key={item.label}>
                 <i className="qs-app-nav-glyph">{item.glyph}</i>
@@ -55,7 +56,8 @@ function AppSurface({
             </div>
             <div className="qs-app-top-actions">
               <span className="qs-app-online"><i className="qs-app-live-dot" /> Desktop online</span>
-              <i>↻</i><i>?</i><i>AI</i><kbd>⌘ K</kbd><b>QS</b>
+              <span className="qs-app-tools"><i>↻</i><i>?</i><i>AI</i><kbd>⌘ K</kbd></span>
+              <span className="qs-app-account"><b>Q</b><span><strong>Quant trader</strong><small>Pro</small></span></span>
             </div>
           </header>
 
@@ -107,9 +109,9 @@ export function ResearchVisual() {
       title="Research"
       workspace="Research"
     >
-      <AppTabs activeTab="Strategy" tabs={researchTabs} workspace="Research" />
       <div className="qs-app-stage qs-research-stage">
         <ResearchSummaryMetrics />
+        <AppTabs activeTab="Strategy" tabs={researchTabs} workspace="Research" />
         <div className="qs-research-workspace">
           <section className="qs-app-panel qs-context-panel">
             <header><strong>Run Context</strong><span>Local</span></header>
@@ -153,9 +155,9 @@ export function BacktestVisual() {
       title="Research"
       workspace="Research"
     >
-      <AppTabs activeTab="Backtest" tabs={researchTabs} workspace="Research" />
       <div className="qs-app-stage qs-backtest-stage">
         <ResearchSummaryMetrics />
+        <AppTabs activeTab="Backtest" tabs={researchTabs} workspace="Research" />
         <div className="qs-backtest-workspace">
           <div className="qs-backtest-meta">
             <section className="qs-app-panel qs-compact-panel">
@@ -237,16 +239,6 @@ export function TradingVisual() {
           <AppMetric label="Open orders" value="2" />
           <AppMetric label="Positions" value="1" />
         </div>
-        <nav className="qs-trading-workflow">
-          <span className="is-active">Order entry</span>
-          <span>Orders &amp; fills</span>
-          <span>Risk rules</span>
-          <span>Smart orders</span>
-          <span>Alerts</span>
-          <span>Hotkeys</span>
-          <span>Strategy session</span>
-          <span>Recordings</span>
-        </nav>
         <div className="qs-trading-workspace">
           <section className="qs-app-panel qs-market-panel">
             <header className="qs-chart-toolbar"><span>Chart 01</span><span>NQ DEC26</span><span>15 min</span><span>Candles</span><span>SIM-201</span><strong>20,842.25</strong></header>
@@ -269,6 +261,16 @@ export function TradingVisual() {
             <footer><span><i className="qs-app-live-dot" /> connected</span><b>Risk active</b></footer>
           </section>
         </div>
+        <nav className="qs-trading-workflow">
+          <span className="is-active">Order entry</span>
+          <span>Orders &amp; fills</span>
+          <span>Risk rules</span>
+          <span>Smart orders</span>
+          <span>Alerts</span>
+          <span>Hotkeys</span>
+          <span>Strategy session</span>
+          <span>Recordings</span>
+        </nav>
       </div>
     </AppSurface>
   );
@@ -293,7 +295,6 @@ export function ReportsVisual() {
       title="Reports"
       workspace="Reports"
     >
-      <AppTabs activeTab="Overview" tabs={["Overview", "Trade analysis", "Periodical analysis", "Graphs", "Trades", "Settings & diagnostics", "Raw JSON", "Monte Carlo", "Prop simulation"]} workspace="Reports" />
       <div className="qs-app-stage qs-reports-stage">
         <aside className="qs-app-panel qs-report-library">
           <header><div><strong>Report library</strong><span>3 saved locally</span></div><b>+</b></header>
@@ -307,6 +308,7 @@ export function ReportsVisual() {
             <div><strong>EMA Cross v1</strong><span>ema_cross_walk_forward.json</span></div>
             <nav><span><i /> Report loaded</span><b>Export</b><b>•••</b></nav>
           </header>
+          <AppTabs activeTab="Overview" tabs={["Overview", "Trade analysis", "Periodical analysis", "Graphs", "Trades", "Settings & diagnostics", "Raw JSON", "Monte Carlo", "Prop simulation"]} workspace="Reports" />
           <div className="qs-app-metrics qs-report-metrics">
             <AppMetric label="Net profit" value="+$42,840" tone="positive" />
             <AppMetric label="Max drawdown" value="-$8,420" />

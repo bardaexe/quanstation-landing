@@ -11,7 +11,7 @@ const oxanium = Oxanium({ variable: "--font-oxanium", subsets: ["latin"] });
 const localOrigin = "http://localhost:3000";
 const siteTitle = "QuantStation — Systematic trading, one workstation";
 const siteDescription = "Build, test, optimize, execute, and review systematic trading workflows in one local-first desktop workstation.";
-const socialImage = `${localOrigin}/og-redesign.png`;
+const socialImage = `${localOrigin}/og-monochrome.png`;
 const socialTitle = "QuantStation";
 const socialDescription = "Research. Validate. Execute.";
 
