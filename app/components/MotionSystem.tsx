@@ -73,6 +73,7 @@ export function MotionSystem() {
     const depthCapability = window.matchMedia("(min-width: 961px) and (hover: hover) and (pointer: fine)");
     const activeSections = new Set<HTMLElement>();
     const releaseTimers = new Map<HTMLElement, number>();
+    const counterFrames = new Map<HTMLElement, number>();
     const sectionIndexes = new Map(sections.map((section, index) => [section, index]));
     let reducedMotion = motionPreference.matches;
     let depthEnabled = !reducedMotion && depthCapability.matches && "IntersectionObserver" in window;
@@ -110,8 +111,35 @@ export function MotionSystem() {
       section.style.removeProperty("--motion-progress");
     };
 
+    const renderCounter = (node: HTMLElement, value: number) => {
+      node.textContent = `${node.dataset.countPrefix ?? ""}${Math.round(value).toLocaleString("en-US")}`;
+    };
+
+    const animateCounters = (section: HTMLElement) => {
+      section.querySelectorAll<HTMLElement>("[data-count-up]").forEach((node) => {
+        const target = Number(node.dataset.countUp);
+        if (!Number.isFinite(target) || node.dataset.countStarted === "true") return;
+        node.dataset.countStarted = "true";
+        if (reducedMotion) {
+          renderCounter(node, target);
+          return;
+        }
+
+        const start = performance.now() + 320;
+        const tick = (now: number) => {
+          const progress = clamp((now - start) / 960, 0, 1);
+          renderCounter(node, target * (1 - (1 - progress) ** 4));
+          if (progress < 1) counterFrames.set(node, window.requestAnimationFrame(tick));
+          else counterFrames.delete(node);
+        };
+        renderCounter(node, 0);
+        counterFrames.set(node, window.requestAnimationFrame(tick));
+      });
+    };
+
     const revealSection = (section: HTMLElement) => {
       section.classList.add("is-visible");
+      animateCounters(section);
       if (reducedMotion) {
         releaseEntranceLayers(section);
       } else if (!releaseTimers.has(section) && !section.classList.contains("motion-settled")) {
@@ -286,7 +314,17 @@ export function MotionSystem() {
 
     const handleMotionPreference = (event: MediaQueryListEvent) => {
       reducedMotion = event.matches;
-      if (reducedMotion) scenes.forEach(revealSection);
+      if (reducedMotion) {
+        counterFrames.forEach((frame) => window.cancelAnimationFrame(frame));
+        counterFrames.clear();
+        scenes.forEach((scene) => {
+          scene.querySelectorAll<HTMLElement>("[data-count-up]").forEach((node) => {
+            const target = Number(node.dataset.countUp);
+            if (Number.isFinite(target)) renderCounter(node, target);
+          });
+          revealSection(scene);
+        });
+      }
       refreshLayoutMetrics();
     };
 
@@ -327,6 +365,8 @@ export function MotionSystem() {
       activityObserver?.disconnect();
       resizeObserver?.disconnect();
       if (motionFrame) window.cancelAnimationFrame(motionFrame);
+      counterFrames.forEach((frame) => window.cancelAnimationFrame(frame));
+      counterFrames.clear();
       releaseTimers.forEach((timer) => window.clearTimeout(timer));
       releaseTimers.clear();
       activeSections.clear();
@@ -343,6 +383,7 @@ export function MotionSystem() {
         section.classList.remove("motion-scene", "motion-section", "motion-settled", "is-visible", "is-in-viewport");
         clearDepthState(section);
         delete section.dataset.motionVariant;
+        section.querySelectorAll<HTMLElement>("[data-count-up]").forEach((node) => delete node.dataset.countStarted);
         section.querySelectorAll<HTMLElement>(".motion-depth-forward, .motion-depth-reverse").forEach((target) => {
           target.classList.remove("motion-depth-forward", "motion-depth-reverse");
         });

@@ -142,6 +142,8 @@ export function ResearchVisual() {
   );
 }
 
+const backtestEquityBars = [38, 34, 48, 44, 56, 52, 64, 60, 71, 66, 78, 73, 85, 80, 91, 86, 96] as const;
+
 export function BacktestVisual() {
   return (
     <AppSurface
@@ -170,16 +172,20 @@ export function BacktestVisual() {
             </section>
           </div>
           <section className="qs-app-panel qs-backtest-control">
-            <header className="qs-panel-title"><div><strong>Backtest Control</strong><span>EMA Cross v1</span></div><span className="qs-complete"><i /> Ready</span></header>
-            <div className="qs-control-grid">
-              <span><i>Folds</i><b>6 / 6</b></span>
-              <span><i>Date range</i><b>Jan 2022 — Dec 2025</b></span>
-              <span><i>Commission</i><b>$2.10 / contract</b></span>
-              <span><i>Slippage</i><b>1 tick</b></span>
-              <span><i>Warmup</i><b>5,000 bars</b></span>
-              <span><i>Seed</i><b>QS-024</b></span>
+            <header className="qs-panel-title"><div><strong>Backtest Control</strong><span>Walk-forward · NQ · 15m</span></div><span className="qs-complete"><i /> Completed</span></header>
+            <div className="qs-equity-preview">
+              <div className="qs-equity-heading"><span>Out-of-sample equity</span><strong data-count-prefix="+$" data-count-up="42840">+$42,840</strong></div>
+              <div className="qs-equity-bars" aria-hidden="true">
+                {backtestEquityBars.map((height, index) => (
+                  <i
+                    key={`${height}-${index}`}
+                    style={{ "--equity-height": `${height}%`, "--bar-index": index } as CSSProperties}
+                  />
+                ))}
+              </div>
+              <div className="qs-equity-axis"><span>Jan</span><span>Apr</span><span>Jul</span><span>Oct</span></div>
             </div>
-            <footer className="qs-control-footer"><span>Run configuration saved locally</span><b>Run backtest</b></footer>
+            <footer className="qs-control-footer"><span>1,284 trades · 6 / 6 folds</span><b>Completed</b></footer>
           </section>
           <section className="qs-app-panel qs-queue-panel">
             <header className="qs-panel-title"><div><strong>Backtest Queue</strong><span>1,284 trades · 3-stage pipeline</span></div><b>4 workers</b></header>
