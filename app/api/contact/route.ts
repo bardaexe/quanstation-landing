@@ -1,4 +1,4 @@
-const interests = new Set(["General", "Starter", "Pro", "Premium", "Elite", "Privateer", "Partnership"]);
+const interests = new Set(["General", "Access", "Plans", "Security", "Starter", "Pro", "Premium", "Elite", "Privateer", "Partnership"]);
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type ContactPayload = {

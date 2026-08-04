@@ -15,6 +15,7 @@ export default function PricingPage() {
         <span className="eyebrow">Plans for every stage</span>
         <h1>Start local.<br />Scale with your process.</h1>
         <p>Choose the capacity and workflow that fit how you research, review, and trade. Final paid pricing will be published before checkout.</p>
+        <div className="page-hero-meta" aria-label="Plan summary"><span><i /> Free local entry</span><span>Six capability tiers</span><span>No hidden checkout</span></div>
       </section>
 
       <section className="pricing-groups container" aria-label="QuantStation plans">
@@ -51,4 +52,3 @@ export default function PricingPage() {
     </main>
   );
 }
-

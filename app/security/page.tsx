@@ -15,6 +15,7 @@ export default function SecurityPage() {
     <main id="main-content">
       <section className="page-hero security-hero container">
         <span className="eyebrow">Security architecture</span><h1>A trading workstation with clear trust boundaries.</h1><p>QuantStation separates presentation, trusted execution, and user strategy code so sensitive state stays within the layer designed to handle it.</p>
+        <div className="page-hero-meta" aria-label="Security model"><span><i /> Local by default</span><span>Isolated workers</span><span>Explicit execution</span></div>
       </section>
       <section className="security-diagram container">
         <div className="diagram-core"><span>Trusted boundary</span><strong>QuantStation</strong><i /></div>
@@ -37,4 +38,3 @@ export default function SecurityPage() {
 }
 
 function Principle({ title, text }: { title: string; text: string }) { return <article><i /><strong>{title}</strong><p>{text}</p></article>; }
-

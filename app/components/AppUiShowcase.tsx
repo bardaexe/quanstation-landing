@@ -3,37 +3,33 @@ import type { CSSProperties, ReactNode } from "react";
 type Workspace = "Portfolio" | "Trading" | "Research" | "Reports" | "Notebook" | "Settings";
 
 const workspaceNavigation: Array<{ label: Workspace; glyph: string }> = [
-  { label: "Portfolio", glyph: "PF" },
-  { label: "Trading", glyph: "TR" },
-  { label: "Research", glyph: "RS" },
-  { label: "Reports", glyph: "RP" },
-  { label: "Notebook", glyph: "NB" },
-  { label: "Settings", glyph: "ST" },
+  { label: "Portfolio", glyph: "▣" },
+  { label: "Trading", glyph: "⌁" },
+  { label: "Research", glyph: "⌬" },
+  { label: "Reports", glyph: "▥" },
+  { label: "Notebook", glyph: "▤" },
+  { label: "Settings", glyph: "⚙" },
 ];
 
 const researchTabs = ["Data", "Strategy", "Backtest", "Pipeline", "Validate", "Results", "AI Assistant"];
 
 function AppSurface({
-  activeTab,
   children,
   className,
   context,
   label,
-  tabs,
   title,
   workspace,
 }: {
-  activeTab: string;
   children: ReactNode;
   className: string;
   context: string;
   label: string;
-  tabs: string[];
   title: string;
   workspace: Workspace;
 }) {
   return (
-    <div className={`product-visual qs-app-surface ${className}`} role="img" aria-label={label}>
+    <div className={`product-visual qs-app-surface ${className}`} data-workspace={workspace.toLowerCase()} role="img" aria-label={label}>
       <div className="qs-app-frame" aria-hidden="true">
         <aside className="qs-app-rail">
           <div className="qs-app-brand">
@@ -48,7 +44,7 @@ function AppSurface({
               </span>
             ))}
           </nav>
-          <div className="qs-app-rail-footer"><i /> <span>Local workspace</span></div>
+          <div className="qs-app-rail-footer"><i>‹</i><span>Collapse rail</span></div>
         </aside>
 
         <div className="qs-app-main">
@@ -59,25 +55,39 @@ function AppSurface({
             </div>
             <div className="qs-app-top-actions">
               <span className="qs-app-online"><i className="qs-app-live-dot" /> Desktop online</span>
-              <i /><i /><i />
+              <i>↻</i><i>?</i><i>AI</i><kbd>⌘ K</kbd><b>QS</b>
             </div>
           </header>
 
-          <div className="qs-app-body">
-            <nav className="qs-app-tabs">
-              <span className="qs-app-module-chip">{workspace}</span>
-              {tabs.map((tab) => <span className={tab === activeTab ? "is-active" : ""} key={tab}>{tab}</span>)}
-            </nav>
-            {children}
-          </div>
+          <div className="qs-app-body">{children}</div>
         </div>
       </div>
     </div>
   );
 }
 
+function AppTabs({ activeTab, tabs, workspace }: { activeTab: string; tabs: string[]; workspace: Workspace }) {
+  return (
+    <nav className="qs-app-tabs">
+      <span className="qs-app-module-chip">{workspace}</span>
+      {tabs.map((tab) => <span className={tab === activeTab ? "is-active" : ""} key={tab}>{tab}</span>)}
+    </nav>
+  );
+}
+
 function AppMetric({ label, value, tone }: { label: string; value: string; tone?: "positive" | "warning" }) {
   return <div className={`qs-app-metric${tone ? ` is-${tone}` : ""}`}><span>{label}</span><strong>{value}</strong></div>;
+}
+
+function ResearchSummaryMetrics() {
+  return (
+    <div className="qs-app-metrics">
+      <AppMetric label="Datasets" value="12" />
+      <AppMetric label="Candles" value="8.4M" />
+      <AppMetric label="Runtime" value="Python / Rust" />
+      <AppMetric label="GPU" value="CUDA (1)" tone="positive" />
+    </div>
+  );
 }
 
 const researchCode = [
@@ -91,21 +101,15 @@ const researchCode = [
 export function ResearchVisual() {
   return (
     <AppSurface
-      activeTab="Strategy"
       className="qs-research-visual"
       context="Data, strategies, backtests, and optimization"
       label="QuantStation Research workspace interface"
-      tabs={researchTabs}
       title="Research"
       workspace="Research"
     >
+      <AppTabs activeTab="Strategy" tabs={researchTabs} workspace="Research" />
       <div className="qs-app-stage qs-research-stage">
-        <div className="qs-app-metrics">
-          <AppMetric label="Datasets" value="12" />
-          <AppMetric label="Candles" value="8.4M" />
-          <AppMetric label="Runtime" value="Python / Rust" />
-          <AppMetric label="GPU" value="CUDA (1)" tone="positive" />
-        </div>
+        <ResearchSummaryMetrics />
         <div className="qs-research-workspace">
           <section className="qs-app-panel qs-context-panel">
             <header><strong>Run Context</strong><span>Local</span></header>
@@ -138,40 +142,47 @@ export function ResearchVisual() {
   );
 }
 
-const equityBars = [30, 38, 34, 47, 44, 55, 51, 64, 60, 72, 68, 79, 74, 88, 83, 94, 90, 100];
-
 export function BacktestVisual() {
   return (
     <AppSurface
-      activeTab="Backtest"
       className="qs-backtest-visual"
       context="Data, strategies, backtests, and optimization"
       label="QuantStation backtest workspace interface"
-      tabs={researchTabs}
       title="Research"
       workspace="Research"
     >
+      <AppTabs activeTab="Backtest" tabs={researchTabs} workspace="Research" />
       <div className="qs-app-stage qs-backtest-stage">
-        <div className="qs-app-metrics">
-          <AppMetric label="Mode" value="Walk-forward" />
-          <AppMetric label="Trades" value="1,284" />
-          <AppMetric label="Folds" value="6 / 6" />
-          <AppMetric label="Processing" value="Multi CPU" tone="positive" />
-        </div>
+        <ResearchSummaryMetrics />
         <div className="qs-backtest-workspace">
-          <section className="qs-app-panel qs-backtest-chart">
-            <header className="qs-panel-title"><div><strong>Backtest Control</strong><span>Optimization run #042</span></div><span className="qs-complete"><i /> Completed</span></header>
-            <div className="qs-chart-heading"><span>OUT-OF-SAMPLE EQUITY</span><strong>+$42,840</strong></div>
-            <div className="qs-equity-chart">
-              <div className="qs-chart-grid-lines" />
-              <div className="qs-equity-bars">
-                {equityBars.map((height, index) => <i key={index} style={{ "--bar-height": `${height}%`, "--bar-index": index } as CSSProperties} />)}
-              </div>
-              <div className="qs-chart-axis"><span>Jan</span><span>Apr</span><span>Jul</span><span>Oct</span></div>
+          <div className="qs-backtest-meta">
+            <section className="qs-app-panel qs-compact-panel">
+              <header><strong>Run Context</strong><span>Local</span></header>
+              <div className="qs-compact-row"><span>Strategy</span><b>EMA Cross v1</b></div>
+              <div className="qs-compact-row"><span>Dataset</span><b>NQ · 15m</b></div>
+              <div className="qs-compact-row"><span>Mode</span><b>Walk-forward</b></div>
+            </section>
+            <section className="qs-app-panel qs-compact-panel">
+              <header><strong>Compute Backend</strong><span>Ready</span></header>
+              <div className="qs-compact-row"><span>Engine</span><b>Python / Rust</b></div>
+              <div className="qs-compact-row"><span>Processing</span><b>Multi CPU</b></div>
+              <div className="qs-compact-row"><span>Workers</span><b>4 local</b></div>
+            </section>
+          </div>
+          <section className="qs-app-panel qs-backtest-control">
+            <header className="qs-panel-title"><div><strong>Backtest Control</strong><span>EMA Cross v1</span></div><span className="qs-complete"><i /> Ready</span></header>
+            <div className="qs-control-grid">
+              <span><i>Folds</i><b>6 / 6</b></span>
+              <span><i>Date range</i><b>Jan 2022 — Dec 2025</b></span>
+              <span><i>Commission</i><b>$2.10 / contract</b></span>
+              <span><i>Slippage</i><b>1 tick</b></span>
+              <span><i>Warmup</i><b>5,000 bars</b></span>
+              <span><i>Seed</i><b>QS-024</b></span>
             </div>
+            <footer className="qs-control-footer"><span>Run configuration saved locally</span><b>Run backtest</b></footer>
           </section>
           <section className="qs-app-panel qs-queue-panel">
-            <header className="qs-panel-title"><div><strong>Backtest Queue</strong><span>3-stage pipeline</span></div><b>4 workers</b></header>
+            <header className="qs-panel-title"><div><strong>Backtest Queue</strong><span>1,284 trades · 3-stage pipeline</span></div><b>4 workers</b></header>
             {[
               ["01", "Optimize", "100%"],
               ["02", "Walk-forward", "100%"],
@@ -207,11 +218,9 @@ const depthRows = [
 export function TradingVisual() {
   return (
     <AppSurface
-      activeTab="Market"
       className="qs-trading-visual"
       context="Execution, accounts, and market context"
       label="QuantStation live trading workspace interface"
-      tabs={["Market", "Order entry", "Orders & fills", "Risk rules", "Recordings"]}
       title="Trading"
       workspace="Trading"
     >
@@ -222,9 +231,19 @@ export function TradingVisual() {
           <AppMetric label="Open orders" value="2" />
           <AppMetric label="Positions" value="1" />
         </div>
+        <nav className="qs-trading-workflow">
+          <span className="is-active">Order entry</span>
+          <span>Orders &amp; fills</span>
+          <span>Risk rules</span>
+          <span>Smart orders</span>
+          <span>Alerts</span>
+          <span>Hotkeys</span>
+          <span>Strategy session</span>
+          <span>Recordings</span>
+        </nav>
         <div className="qs-trading-workspace">
           <section className="qs-app-panel qs-market-panel">
-            <header className="qs-chart-toolbar"><span>NQ DEC26</span><span>15 sec</span><span>Candles</span><span>Volume</span><span>Studies</span><strong>20,842.25</strong></header>
+            <header className="qs-chart-toolbar"><span>Chart 01</span><span>NQ DEC26</span><span>15 min</span><span>Candles</span><span>SIM-201</span><strong>20,842.25</strong></header>
             <div className="qs-candle-chart">
               <div className="qs-chart-grid-lines" />
               <div className="qs-live-price"><span>20,842.25</span></div>
@@ -262,43 +281,54 @@ const reportSpark = [28, 42, 38, 51, 47, 60, 57, 70, 66, 78, 74, 88, 83, 96];
 export function ReportsVisual() {
   return (
     <AppSurface
-      activeTab="Overview"
       className="qs-reports-visual"
       context="Native QuantStation analysis and imported history"
       label="QuantStation report analysis workspace interface"
-      tabs={["Overview", "Trade analysis", "Periodical", "Graphs", "Trades", "Monte Carlo"]}
       title="Reports"
       workspace="Reports"
     >
+      <AppTabs activeTab="Overview" tabs={["Overview", "Trade analysis", "Periodical analysis", "Graphs", "Trades", "Settings & diagnostics", "Raw JSON", "Monte Carlo", "Prop simulation"]} workspace="Reports" />
       <div className="qs-app-stage qs-reports-stage">
-        <header className="qs-report-heading"><div><strong>EMA Cross v1</strong><span>ema_cross_walk_forward.json</span></div><span><i /> Report loaded</span></header>
-        <div className="qs-app-metrics qs-report-metrics">
-          <AppMetric label="Net profit" value="+$42,840" tone="positive" />
-          <AppMetric label="Max drawdown" value="-$8,420" />
-          <AppMetric label="Profit factor" value="1.82" />
-          <AppMetric label="Return / DD" value="5.09" />
-          <AppMetric label="Quality score" value="87 / 100" tone="positive" />
-        </div>
-        <div className="qs-report-workspace">
-          <section className="qs-app-panel qs-quality-panel">
-            <header className="qs-panel-title"><div><strong>Run quality</strong><span>Evidence summary</span></div><b>87</b></header>
-            <div className="qs-quality-insights">
-              <span><i />Stable expectancy<b>Strong</b></span>
-              <span><i />Bounded drawdown<b>Healthy</b></span>
-              <span><i />Trade sample<b>1,284</b></span>
-            </div>
-            <div className="qs-report-spark">{reportSpark.map((height, index) => <i key={index} style={{ "--spark-height": `${height}%`, "--bar-index": index } as CSSProperties} />)}</div>
-          </section>
-          <section className="qs-app-panel qs-evidence-panel">
-            <header><strong>Recent evidence</strong><span>Walk-forward / 6 folds</span></header>
-            <div className="qs-evidence-head"><span>Period</span><span>Return</span><span>Drawdown</span></div>
-            {[
-              ["Jan - Mar", "+8.4%", "-2.1%"],
-              ["Apr - Jun", "+6.7%", "-1.8%"],
-              ["Jul - Sep", "+9.2%", "-2.6%"],
-            ].map((row) => <div className="qs-evidence-row" key={row[0]}><strong>{row[0]}</strong><span>{row[1]}</span><span>{row[2]}</span></div>)}
-            <footer><span>Processing</span><strong>Multi CPU</strong><b>Saved locally</b></footer>
-          </section>
+        <aside className="qs-app-panel qs-report-library">
+          <header><div><strong>Report library</strong><span>3 saved locally</span></div><b>+</b></header>
+          <div className="qs-report-item is-selected"><div><strong>EMA Cross v1</strong><span>Walk-forward · NQ</span></div><b>•••</b></div>
+          <div className="qs-report-item"><div><strong>Opening Range</strong><span>Validation · ES</span></div><b>•••</b></div>
+          <div className="qs-report-item"><div><strong>Momentum Grid</strong><span>Baseline · CL</span></div><b>•••</b></div>
+          <footer><span>Import JSON</span><b>New report</b></footer>
+        </aside>
+        <div className="qs-report-detail">
+          <header className="qs-report-heading">
+            <div><strong>EMA Cross v1</strong><span>ema_cross_walk_forward.json</span></div>
+            <nav><span><i /> Report loaded</span><b>Export</b><b>•••</b></nav>
+          </header>
+          <div className="qs-app-metrics qs-report-metrics">
+            <AppMetric label="Net profit" value="+$42,840" tone="positive" />
+            <AppMetric label="Max drawdown" value="-$8,420" />
+            <AppMetric label="Profit factor" value="1.82" />
+            <AppMetric label="Return / DD" value="5.09" />
+            <AppMetric label="Quality score" value="87 / 100" tone="positive" />
+          </div>
+          <div className="qs-report-workspace">
+            <section className="qs-app-panel qs-quality-panel">
+              <header className="qs-panel-title"><div><strong>Run quality</strong><span>Evidence summary</span></div><b>87</b></header>
+              <div className="qs-quality-insights">
+                <span><i />Stable expectancy<b>Strong</b></span>
+                <span><i />Bounded drawdown<b>Healthy</b></span>
+                <span><i />Trade sample<b>1,284</b></span>
+              </div>
+              <div className="qs-report-spark">{reportSpark.map((height, index) => <i key={index} style={{ "--spark-height": `${height}%`, "--bar-index": index } as CSSProperties} />)}</div>
+            </section>
+            <section className="qs-app-panel qs-evidence-panel">
+              <header><strong>Recent evidence</strong><span>Walk-forward / 6 folds</span></header>
+              <div className="qs-evidence-head"><span>Period</span><span>Return</span><span>Drawdown</span></div>
+              {[
+                ["Jan - Mar", "+8.4%", "-2.1%"],
+                ["Apr - Jun", "+6.7%", "-1.8%"],
+                ["Jul - Sep", "+9.2%", "-2.6%"],
+              ].map((row) => <div className="qs-evidence-row" key={row[0]}><strong>{row[0]}</strong><span>{row[1]}</span><span>{row[2]}</span></div>)}
+              <footer><span>Processing</span><strong>Multi CPU</strong><b>Saved locally</b></footer>
+            </section>
+          </div>
         </div>
       </div>
     </AppSurface>

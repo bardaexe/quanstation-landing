@@ -115,7 +115,7 @@ export function MotionSystem() {
       if (reducedMotion) {
         releaseEntranceLayers(section);
       } else if (!releaseTimers.has(section) && !section.classList.contains("motion-settled")) {
-        releaseTimers.set(section, window.setTimeout(() => releaseEntranceLayers(section), 1750));
+        releaseTimers.set(section, window.setTimeout(() => releaseEntranceLayers(section), 1200));
       }
     };
 
@@ -183,8 +183,8 @@ export function MotionSystem() {
           const centered = travel - 0.5;
           depthUpdates.push({
             section,
-            depth: `${(centered * -16).toFixed(2)}px`,
-            reverseDepth: `${(centered * 12).toFixed(2)}px`,
+            depth: `${(centered * -12).toFixed(2)}px`,
+            reverseDepth: `${(centered * 8).toFixed(2)}px`,
             progress: travel.toFixed(4),
           });
 

@@ -6,7 +6,7 @@ export const metadata: Metadata = { title: "Contact", description: "Talk with th
 export default async function ContactPage({ searchParams }: { searchParams: Promise<{ intent?: string }> }) {
   const { intent } = await searchParams;
   const normalized = intent ? intent.charAt(0).toUpperCase() + intent.slice(1) : "General";
-  const options = new Set(["General", "Starter", "Pro", "Premium", "Elite", "Privateer", "Partnership"]);
+  const options = new Set(["General", "Access", "Plans", "Security", "Starter", "Pro", "Premium", "Elite", "Privateer", "Partnership"]);
   const interest = options.has(normalized) ? normalized : "General";
   return (
     <main id="main-content">
@@ -24,4 +24,3 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
     </main>
   );
 }
-

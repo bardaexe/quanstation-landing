@@ -41,9 +41,9 @@ export default function Home() {
       </section>
 
       <FeatureStory id="research" index="01" label="Quant Lab" title="Build strategies in the languages quants actually use." copy="Create versioned Python and native Rust projects with typed properties, local datasets, and isolated validation in one focused workspace." features={["Python and native Rust", "Typed properties", "Local market datasets", "Isolated validation"]} visual={<ResearchVisual />} />
-      <FeatureStory id="backtesting" index="02" label="Backtest & optimize" title="Test every assumption before capital is at risk." copy="Run regular backtests, walk-forward optimization, and multi-objective research with bounded parallel workers—then send every result into the same Report Lab." features={["Regular backtests", "Walk-forward optimization", "Multi-objective optimization", "Monte Carlo and prop simulation"]} visual={<BacktestVisual />} />
+      <FeatureStory id="backtesting" index="02" label="Backtest & optimize" title="Test every assumption before capital is at risk." copy="Run regular backtests, walk-forward optimization, and multi-objective research with bounded parallel workers—then send every result into the same Report Lab." features={["Regular backtests", "Walk-forward optimization", "Multi-objective optimization", "Monte Carlo and prop simulation"]} visual={<BacktestVisual />} reverse />
       <FeatureStory id="execution" index="03" label="Trading workspace" title="Move from research to execution without losing control." copy="Read historical and live context, work across persistent chart layouts, inspect orders and fills, and keep high-impact actions explicit." features={["Native multi-chart workspace", "Studies and drawings", "Smart orders and alerts", "Confirmed risk controls"]} visual={<TradingVisual />} />
-      <FeatureStory id="reports" index="04" label="Report Lab" title="Turn every run and every trade into evidence." copy="Compare statistics, settings, trades, equity, drawdown, and concentration. Review what worked, what failed, and what deserves another test." features={["Native report analysis", "Portfolio concentration", "Trade-level review", "Journal and notebook context"]} visual={<ReportsVisual />} />
+      <FeatureStory id="reports" index="04" label="Report Lab" title="Turn every run and every trade into evidence." copy="Compare statistics, settings, trades, equity, drawdown, and concentration. Review what worked, what failed, and what deserves another test." features={["Native report analysis", "Portfolio concentration", "Trade-level review", "Journal and notebook context"]} visual={<ReportsVisual />} reverse />
 
       <section className="workflow-section container">
         <div className="workflow-heading"><span className="section-index">02 / Workflow</span><h2>From signal to evidence.<br />No broken handoffs.</h2></div>
@@ -85,9 +85,9 @@ export default function Home() {
   );
 }
 
-function FeatureStory({ id, index, label, title, copy, features, visual }: { id: string; index: string; label: string; title: string; copy: string; features: string[]; visual: React.ReactNode }) {
+function FeatureStory({ id, index, label, title, copy, features, visual, reverse = false }: { id: string; index: string; label: string; title: string; copy: string; features: string[]; visual: React.ReactNode; reverse?: boolean }) {
   return (
-    <section className="feature-story container" id={id}>
+    <section className={reverse ? "feature-story feature-story-reverse container" : "feature-story container"} id={id}>
       <div className="story-heading"><span className="section-index">{index} / {label}</span><h2>{title}</h2></div>
       <div className="story-grid"><div className="story-visual">{visual}</div><div className="story-aside"><p>{copy}</p><span className="mini-label">CAPABILITIES</span>{features.map((feature) => <Link href={`/platform#${id}`} key={feature}>{feature}<span>↗</span></Link>)}</div></div>
     </section>

@@ -21,10 +21,15 @@ export default function PlatformPage() {
         <span className="eyebrow">QuantStation platform</span>
         <h1>Everything you need to trade systematic ideas with context.</h1>
         <p>Charting, strategy research, execution, performance analysis, and deliberate review—connected inside one native workstation.</p>
+        <div className="page-hero-meta" aria-label="Platform highlights">
+          <span><i /> Native desktop</span>
+          <span>Local-first research</span>
+          <span>Python + Rust</span>
+        </div>
         <div className="anchor-links">{capabilities.map((item) => <a href={`#${item.id}`} key={item.id}><span>{item.number}</span>{item.eyebrow}</a>)}</div>
       </section>
-      {capabilities.map((item) => (
-        <section className="platform-chapter container" id={item.id} key={item.id}>
+      {capabilities.map((item, index) => (
+        <section className={index % 2 === 1 ? "platform-chapter platform-chapter-reverse container" : "platform-chapter container"} id={item.id} key={item.id}>
           <div className="chapter-copy">
             <span className="section-index">{item.number} / {item.eyebrow}</span>
             <h2>{item.title}</h2>
@@ -38,4 +43,3 @@ export default function PlatformPage() {
     </main>
   );
 }
-

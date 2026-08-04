@@ -110,6 +110,10 @@ export function SiteHeader() {
             )}
           </div>
         </nav>
+        <div className="header-signal" aria-label="Product availability">
+          <i aria-hidden="true" />
+          <span>Local-first desktop</span>
+        </div>
         <div className="header-actions">
           <Link className="button button-compact button-ghost header-contact" href="/contact">Contact</Link>
           <Link className="button button-compact button-light" href="/contact?intent=access">Request access</Link>

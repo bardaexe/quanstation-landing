@@ -25,7 +25,7 @@ const faqs = [
 export default function ResourcesPage() {
   return (
     <main id="main-content">
-      <section className="page-hero resources-hero container"><span className="eyebrow">Resources</span><h1>Clarity before complexity.</h1><p>Learn the workflows, architecture, and research model behind QuantStation—without trading mythology or hidden assumptions.</p></section>
+      <section className="page-hero resources-hero container"><span className="eyebrow">Resources</span><h1>Clarity before complexity.</h1><p>Learn the workflows, architecture, and research model behind QuantStation—without trading mythology or hidden assumptions.</p><div className="page-hero-meta" aria-label="Resource areas"><span><i /> Workflow guides</span><span>Architecture notes</span><span>Direct answers</span></div></section>
       <section className="resource-guides container" id="guides">
         <div className="resource-heading"><span className="section-index">Guides</span><h2>Start with the workflow.</h2></div>
         <div className="guide-grid">{guides.map(([number, title, text, time]) => <article key={number}><span>{number}</span><div><strong>{title}</strong><p>{text}</p><small>{time} read</small></div><i>↗</i></article>)}</div>

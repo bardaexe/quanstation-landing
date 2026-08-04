@@ -44,7 +44,7 @@ export function ContactForm({ defaultInterest = "General" }: { defaultInterest?:
         <label>Company or team<input name="company" autoComplete="organization" maxLength={120} /></label>
         <label>What are you exploring?
           <select name="interest" defaultValue={defaultInterest}>
-            <option>General</option><option>Starter</option><option>Pro</option><option>Premium</option><option>Elite</option><option>Privateer</option><option>Partnership</option>
+            <option>General</option><option>Access</option><option>Plans</option><option>Security</option><option>Starter</option><option>Pro</option><option>Premium</option><option>Elite</option><option>Privateer</option><option>Partnership</option>
           </select>
         </label>
       </div>
@@ -59,4 +59,3 @@ export function ContactForm({ defaultInterest = "General" }: { defaultInterest?:
     </form>
   );
 }
-

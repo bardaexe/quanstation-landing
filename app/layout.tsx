@@ -11,7 +11,9 @@ const oxanium = Oxanium({ variable: "--font-oxanium", subsets: ["latin"] });
 const localOrigin = "http://localhost:3000";
 const siteTitle = "QuantStation — Systematic trading, one workstation";
 const siteDescription = "Build, test, optimize, execute, and review systematic trading workflows in one local-first desktop workstation.";
-const socialImage = `${localOrigin}/og.png`;
+const socialImage = `${localOrigin}/og-redesign.png`;
+const socialTitle = "QuantStation";
+const socialDescription = "Research. Validate. Execute.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(localOrigin),
@@ -22,17 +24,17 @@ export const metadata: Metadata = {
   description: siteDescription,
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
   openGraph: {
-    title: siteTitle,
-    description: "From strategy idea to trading decision. One workstation.",
+    title: socialTitle,
+    description: socialDescription,
     type: "website",
     siteName: "QuantStation",
     url: localOrigin,
-    images: [{ url: socialImage, width: 1536, height: 1024, alt: "QuantStation signal core" }],
+    images: [{ url: socialImage, width: 1731, height: 909, alt: `${socialTitle} — ${socialDescription}` }],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteTitle,
-    description: "From strategy idea to trading decision. One workstation.",
+    title: socialTitle,
+    description: socialDescription,
     images: [socialImage],
   },
 };
