@@ -29,14 +29,21 @@ export async function POST(request: Request) {
     if (!interests.has(interest)) return Response.json({ error: "Please select a valid topic." }, { status: 400 });
     if (message.length < 10) return Response.json({ error: "Please add a little more context." }, { status: 400 });
 
-    const [{ env }, { getDb }, { contactRequests }] = await Promise.all([
-      import("cloudflare:workers"),
-      import("../../../db"),
-      import("../../../db/schema"),
-    ]);
-    await ensureSchema(env.DB);
     const id = crypto.randomUUID();
-    await getDb().insert(contactRequests).values({ id, name, email, company, interest, message, createdAt: new Date() });
+    const createdAt = new Date();
+    const { env } = await import("cloudflare:workers");
+
+    if (env.DB) {
+      const [{ getDb }, { contactRequests }] = await Promise.all([
+        import("../../../db"),
+        import("../../../db/schema"),
+      ]);
+      await ensureSchema(env.DB);
+      await getDb().insert(contactRequests).values({ id, name, email, company, interest, message, createdAt });
+    } else {
+      await deliverToWebhook({ id, name, email, company, interest, message, createdAt: createdAt.toISOString() });
+    }
+
     return Response.json({ ok: true, id }, { status: 201 });
   } catch (error) {
     const message = error instanceof SyntaxError ? "Please submit valid form data." : "The request could not be saved. Please try again.";
@@ -63,4 +70,21 @@ async function ensureSchema(database: D1Database) {
     database.prepare("CREATE INDEX IF NOT EXISTS idx_contact_requests_created_at ON contact_requests (created_at)"),
   ]);
   await database.prepare("PRAGMA optimize").run();
+}
+
+async function deliverToWebhook(payload: Record<string, string>) {
+  const url = process.env.CONTACT_WEBHOOK_URL;
+  if (!url) throw new Error("CONTACT_WEBHOOK_URL is unavailable");
+
+  const headers: Record<string, string> = { "content-type": "application/json" };
+  if (process.env.CONTACT_WEBHOOK_SECRET) {
+    headers.authorization = `Bearer ${process.env.CONTACT_WEBHOOK_SECRET}`;
+  }
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(payload),
+  });
+  if (!response.ok) throw new Error(`Contact webhook returned ${response.status}`);
 }

@@ -20,13 +20,25 @@ The public website is deliberately isolated from the QuantStation desktop and ba
 - `/resources` — guides, integrations, and FAQ
 - `/contact` — persisted product, plan, security, and partnership inquiries
 
-## Development
+## Development and deployment
 
 ```bash
 npm install
 npm run dev
 npm run lint
 npm run build
+```
+
+The default scripts use native Next.js and produce `.next`, which is the output
+expected by Vercel. Configure `CONTACT_WEBHOOK_URL` in Vercel to receive valid
+contact submissions. `CONTACT_WEBHOOK_SECRET` is optional and, when present, is
+sent as a bearer token.
+
+The Cloudflare build keeps D1 persistence through the `DB` binding:
+
+```bash
+npm run dev:cloudflare
+npm run build:cloudflare
 npm test
 ```
 
