@@ -208,11 +208,67 @@ export function BacktestVisual() {
   );
 }
 
+// Real 15-second NQ candles sampled from the local NinjaTrader backtest archive.
 const candles = [
-  [44, 14, 8, 0], [58, 18, 3, 1], [49, 13, 15, 0], [66, 20, 8, 1], [61, 16, 18, 1], [74, 22, 5, 0],
-  [68, 18, 12, 0], [81, 24, 4, 1], [76, 15, 14, 1], [88, 27, 3, 1], [79, 18, 12, 0], [92, 24, 2, 1],
-  [84, 16, 9, 0], [96, 26, 1, 1], [89, 19, 7, 0], [100, 28, 0, 1],
+  { open: 30866.75, high: 30874.00, low: 30866.75, close: 30873.25 },
+  { open: 30873.25, high: 30873.75, low: 30866.25, close: 30866.50 },
+  { open: 30867.50, high: 30867.50, low: 30860.25, close: 30860.25 },
+  { open: 30860.00, high: 30866.00, low: 30860.00, close: 30863.00 },
+  { open: 30863.00, high: 30864.25, low: 30861.25, close: 30864.25 },
+  { open: 30864.00, high: 30873.50, low: 30860.75, close: 30872.00 },
+  { open: 30872.25, high: 30874.25, low: 30871.25, close: 30874.25 },
+  { open: 30873.50, high: 30874.75, low: 30866.25, close: 30869.25 },
+  { open: 30869.00, high: 30870.25, low: 30866.25, close: 30870.25 },
+  { open: 30870.25, high: 30870.75, low: 30865.25, close: 30870.50 },
+  { open: 30871.50, high: 30874.50, low: 30870.00, close: 30873.50 },
+  { open: 30872.75, high: 30882.00, low: 30871.50, close: 30881.00 },
+  { open: 30880.00, high: 30893.00, low: 30879.25, close: 30893.00 },
+  { open: 30893.50, high: 30897.25, low: 30881.25, close: 30892.00 },
+  { open: 30890.00, high: 30901.00, low: 30888.50, close: 30898.00 },
+  { open: 30898.25, high: 30898.75, low: 30888.50, close: 30893.75 },
+  { open: 30893.50, high: 30896.25, low: 30891.50, close: 30894.50 },
+  { open: 30893.50, high: 30896.00, low: 30887.75, close: 30888.25 },
+  { open: 30888.00, high: 30889.50, low: 30877.75, close: 30882.25 },
+  { open: 30882.25, high: 30885.50, low: 30881.75, close: 30885.50 },
+  { open: 30884.50, high: 30886.50, low: 30879.00, close: 30884.75 },
+  { open: 30885.75, high: 30888.75, low: 30885.00, close: 30887.75 },
+  { open: 30889.00, high: 30892.25, low: 30889.00, close: 30889.25 },
+  { open: 30888.75, high: 30894.25, low: 30888.75, close: 30892.25 },
+  { open: 30891.50, high: 30895.50, low: 30890.75, close: 30895.50 },
+  { open: 30894.25, high: 30897.25, low: 30893.50, close: 30895.75 },
+  { open: 30896.50, high: 30899.75, low: 30895.75, close: 30896.00 },
+  { open: 30896.75, high: 30902.50, low: 30896.75, close: 30902.50 },
+  { open: 30902.25, high: 30906.50, low: 30897.75, close: 30899.25 },
+  { open: 30899.00, high: 30899.50, low: 30896.25, close: 30898.25 },
+  { open: 30900.00, high: 30901.00, low: 30888.50, close: 30889.25 },
+  { open: 30890.00, high: 30890.00, low: 30883.25, close: 30887.25 },
+  { open: 30886.75, high: 30888.75, low: 30886.00, close: 30888.75 },
+  { open: 30888.75, high: 30890.25, low: 30887.00, close: 30889.25 },
+  { open: 30891.25, high: 30899.50, low: 30891.00, close: 30896.75 },
+  { open: 30895.50, high: 30909.50, low: 30892.50, close: 30909.50 },
+  { open: 30908.50, high: 30916.75, low: 30905.75, close: 30915.00 },
+  { open: 30914.25, high: 30917.00, low: 30912.00, close: 30917.00 },
+  { open: 30917.25, high: 30921.00, low: 30915.75, close: 30919.50 },
+  { open: 30919.75, high: 30926.25, low: 30917.25, close: 30921.75 },
+  { open: 30920.50, high: 30922.50, low: 30917.75, close: 30920.50 },
+  { open: 30921.25, high: 30921.25, low: 30917.00, close: 30919.50 },
+  { open: 30918.75, high: 30918.75, low: 30897.25, close: 30905.75 },
+  { open: 30907.50, high: 30915.25, low: 30906.25, close: 30911.00 },
+  { open: 30910.25, high: 30915.00, low: 30908.75, close: 30914.00 },
+  { open: 30915.00, high: 30927.25, low: 30913.50, close: 30924.50 },
+  { open: 30924.00, high: 30928.25, low: 30921.25, close: 30922.75 },
+  { open: 30922.50, high: 30926.75, low: 30922.50, close: 30925.50 },
+  { open: 30923.25, high: 30926.50, low: 30922.50, close: 30926.50 },
+  { open: 30927.25, high: 30927.25, low: 30922.75, close: 30923.75 },
 ] as const;
+
+const chartLow = 30850;
+const chartHigh = 30935;
+const chartCandles = candles.slice(3, 47);
+const livePrice = chartCandles[chartCandles.length - 1].close;
+const chartTicks = Array.from({ length: 5 }, (_, index) => chartHigh - ((chartHigh - chartLow) * index) / 4);
+const formatChartPrice = (price: number) => price.toLocaleString("en-US", { minimumFractionDigits: price % 1 ? 2 : 0, maximumFractionDigits: 2 });
+const chartPosition = (price: number) => `${((chartHigh - price) / (chartHigh - chartLow)) * 100}%`;
 
 const depthRows = [
   ["20,843.25", "6", "3", 42, "ask"],
@@ -241,14 +297,36 @@ export function TradingVisual() {
         </div>
         <div className="qs-trading-workspace">
           <section className="qs-app-panel qs-market-panel">
-            <header className="qs-chart-toolbar"><span>Chart 01</span><span>NQ DEC26</span><span>15 min</span><span>Candles</span><span>SIM-201</span><strong>20,842.25</strong></header>
+            <header className="qs-chart-toolbar"><span>Chart 01</span><span>NQ</span><span>15 sec</span><span>Candles</span><span>SIM-201</span><strong>{formatChartPrice(livePrice)}</strong></header>
             <div className="qs-candle-chart">
-              <div className="qs-chart-grid-lines" />
-              <div className="qs-live-price"><span>20,842.25</span></div>
-              {candles.map(([height, body, offset, up], index) => (
-                <i className={up ? "up" : "down"} key={index} style={{ "--candle-height": `${height}%`, "--candle-body": `${body}px`, "--candle-offset": `${offset}%`, "--candle-index": index } as CSSProperties} />
-              ))}
-              <div className="qs-chart-symbol">NQ</div>
+              <div className="qs-candle-plot">
+                <div className="qs-chart-grid-lines" />
+                <div className="qs-live-price" style={{ "--live-price-top": chartPosition(livePrice) } as CSSProperties}><span>{formatChartPrice(livePrice)}</span></div>
+                {chartCandles.map((candle, index) => {
+                  const bodyTop = Math.max(candle.open, candle.close);
+                  const bodyBottom = Math.min(candle.open, candle.close);
+
+                  return (
+                    <i
+                      className={`qs-candle ${candle.close >= candle.open ? "up" : "down"}`}
+                      key={`${candle.open}-${index}`}
+                      style={{
+                        "--candle-x": `${((index + 0.5) / chartCandles.length) * 100}%`,
+                        "--candle-wick-top": chartPosition(candle.high),
+                        "--candle-wick-bottom": chartPosition(candle.low),
+                        "--candle-body-top": chartPosition(bodyTop),
+                        "--candle-body-bottom": chartPosition(bodyBottom),
+                        "--candle-index": index,
+                      } as CSSProperties}
+                    ><span /></i>
+                  );
+                })}
+                <div className="qs-chart-symbol">NQ</div>
+              </div>
+              <div className="qs-chart-price-axis" aria-hidden="true">
+                {chartTicks.map((price, index) => <span key={price} style={{ top: `${index * 25}%` }}>{formatChartPrice(price)}</span>)}
+              </div>
+              <div className="qs-chart-time-axis" aria-hidden="true"><span>19:28</span><span>19:30</span><span>19:33</span><span>19:36</span><span>19:38</span></div>
             </div>
           </section>
           <section className="qs-app-panel qs-depth-panel">
