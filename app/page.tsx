@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BacktestVisual, ReportsVisual, ResearchVisual, SignalCore, TradingVisual } from "./components/ProductVisuals";
+import { HeroSignalExperience } from "./components/HeroSignalExperience";
+import { BacktestVisual, ReportsVisual, ResearchVisual, TradingVisual } from "./components/ProductVisuals";
 import { integrations } from "./lib/site-data";
 
 export const metadata: Metadata = {
@@ -15,18 +16,18 @@ export default function Home() {
         <div className="hero-grid">
           <div className="hero-copy reveal">
             <span className="eyebrow">A native quant trading workstation</span>
-            <h1>From strategy idea to trading decision.</h1>
+            <h1>From strategy idea to <span>trading decision.</span></h1>
+            <p className="hero-lede">Build, validate, and execute systematic strategies without breaking the chain of evidence.</p>
             <div className="hero-actions">
               <Link className="button button-light" href="/contact?intent=access">Request access</Link>
               <Link className="button button-ghost" href="/platform">Explore platform</Link>
             </div>
+            <div className="hero-assurance" aria-label="QuantStation system summary">
+              <span><i aria-hidden="true" /> Local engine online</span>
+              <span>Python · Rust · Native execution</span>
+            </div>
           </div>
-          <div className="hero-object reveal reveal-delay"><SignalCore /></div>
-          <div className="hero-pillars reveal reveal-delay-2">
-            <Link href="/platform#research"><span>01</span><strong>Build strategies</strong><small>Python and native Rust</small></Link>
-            <Link href="/platform#backtesting"><span>02</span><strong>Validate evidence</strong><small>Backtest and optimize locally</small></Link>
-            <Link href="/platform#execution"><span>03</span><strong>Execute with control</strong><small>Live context and explicit risk</small></Link>
-          </div>
+          <HeroSignalExperience />
         </div>
         <div className="integration-strip" aria-label="QuantStation technologies">
           {integrations.map((item) => <span key={item}>{item}</span>)}
@@ -96,4 +97,3 @@ function FeatureStory({ id, index, label, title, copy, features, visual }: { id:
 function TrustCell({ number, title, text }: { number: string; title: string; text: string }) {
   return <div className="trust-cell"><span>{number}</span><strong>{title}</strong><p>{text}</p></div>;
 }
-

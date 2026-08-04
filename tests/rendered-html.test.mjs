@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
+import { readdir, readFile } from "node:fs/promises";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
+import { brotliCompressSync } from "node:zlib";
 
 const routes = [
-  ["/", /From strategy idea to trading decision/i, /Systematic trading, one workstation/i],
+  ["/", /From strategy idea to trading decision[\s\S]*Signal relay[\s\S]*System ready/i, /Systematic trading, one workstation/i],
   ["/platform", /Everything you need to trade systematic ideas with context/i, /Platform — QuantStation/i],
   ["/pricing", /Start local[\s\S]*Scale with your process/i, /Pricing — QuantStation/i],
   ["/security", /clear trust boundaries/i, /Security — QuantStation/i],
@@ -38,6 +41,67 @@ for (const [path, heading, title] of routes) {
   });
 }
 
+test("server-renders the FAQ without a client UI runtime", async () => {
+  const app = await worker();
+  const response = await app.fetch(
+    new Request("http://localhost/resources", { headers: { accept: "text/html" } }),
+    env(),
+    context,
+  );
+  const html = await response.text();
+  assert.match(html, /<details[^>]+name="quantstation-faq"/i);
+  assert.doesNotMatch(html, /@heroui|accordion__trigger/i);
+});
+
+test("server-renders the scroll telemetry as non-interactive decoration", async () => {
+  const app = await worker();
+  const response = await app.fetch(
+    new Request("http://localhost/", { headers: { accept: "text/html" } }),
+    env(),
+    context,
+  );
+  const html = await response.text();
+  assert.match(html, /<div[^>]+aria-hidden="true"[^>]+class="scroll-progress"/i);
+  assert.match(html, /data-section="01"[^>]+data-total="00"/i);
+});
+
+test("server-renders authentic app UI showcases without embedding the app runtime", async () => {
+  const app = await worker();
+  const response = await app.fetch(
+    new Request("http://localhost/", { headers: { accept: "text/html" } }),
+    env(),
+    context,
+  );
+  const html = await response.text();
+  assert.match(html, /QuantStation Research workspace interface/i);
+  assert.match(html, /Desktop online[\s\S]*Run Context[\s\S]*Project Source/i);
+  assert.match(html, /Backtest Queue[\s\S]*Market depth[\s\S]*Run quality/i);
+  assert.match(html, /Data[\s\S]*Strategy[\s\S]*Backtest[\s\S]*Pipeline[\s\S]*Validate[\s\S]*Results[\s\S]*AI Assistant/i);
+  assert.doesNotMatch(html, /<iframe\b/i);
+});
+
+test("keeps the motion runtime and client assets within performance budgets", async () => {
+  const assetsDirectory = fileURLToPath(new URL("../dist/client/assets/", import.meta.url));
+  const assetNames = await readdir(assetsDirectory);
+  const javascriptNames = assetNames.filter((name) => name.endsWith(".js"));
+  const stylesheetNames = assetNames.filter((name) => name.endsWith(".css"));
+  const motionName = javascriptNames.find((name) => /MotionSystem/i.test(name));
+
+  assert.ok(motionName, "expected a dedicated MotionSystem client chunk");
+
+  const javascript = await Promise.all(javascriptNames.map((name) => readFile(`${assetsDirectory}/${name}`)));
+  const stylesheets = await Promise.all(stylesheetNames.map((name) => readFile(`${assetsDirectory}/${name}`)));
+  const motionSource = await readFile(`${assetsDirectory}/${motionName}`);
+  const compressedSize = (contents) => brotliCompressSync(contents).byteLength;
+
+  assert.ok(compressedSize(motionSource) <= 3_072, "MotionSystem exceeded 3 KiB Brotli");
+  assert.ok(javascript.reduce((total, contents) => total + compressedSize(contents), 0) <= 98_304, "client JavaScript exceeded 96 KiB Brotli");
+  assert.ok(stylesheets.reduce((total, contents) => total + compressedSize(contents), 0) <= 15_360, "stylesheets exceeded 15 KiB Brotli");
+  assert.match(motionSource.toString(), /IntersectionObserver/);
+  assert.match(motionSource.toString(), /requestAnimationFrame/);
+  assert.doesNotMatch(motionSource.toString(), /setInterval/);
+});
+
 test("rejects invalid contact requests before persistence", async () => {
   const app = await worker();
   const response = await app.fetch(
@@ -67,4 +131,3 @@ test("silently accepts honeypot spam without touching storage", async () => {
   assert.equal(response.status, 201);
   assert.deepEqual(await response.json(), { ok: true });
 });
-

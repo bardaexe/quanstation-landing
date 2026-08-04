@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { FaqAccordion } from "../components/FaqAccordion";
 
 export const metadata: Metadata = { title: "Resources", description: "Guides, architecture notes, integrations, and answers for QuantStation users." };
 
@@ -35,10 +36,9 @@ export default function ResourcesPage() {
       </section>
       <section className="faq-section container" id="faq">
         <div className="faq-heading"><span className="section-index">FAQ</span><h2>Direct answers.</h2></div>
-        <div className="faq-list">{faqs.map(([question, answer]) => <details key={question}><summary>{question}<span>+</span></summary><p>{answer}</p></details>)}</div>
+        <FaqAccordion items={faqs} />
       </section>
       <section className="inline-cta container"><div><span className="eyebrow">Still deciding?</span><h2>Bring us the real workflow.</h2></div><Link className="button button-light" href="/contact">Contact the team</Link></section>
     </main>
   );
 }
-
