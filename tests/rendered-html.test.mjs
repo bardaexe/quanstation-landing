@@ -27,6 +27,13 @@ function env() {
 
 const context = { waitUntil() {}, passThroughOnException() {} };
 
+function renderedAnchors(html) {
+  return [...html.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/gi)].map(([, attributes, content]) => ({
+    href: attributes.match(/\bhref="([^"]+)"/i)?.[1],
+    text: content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+  }));
+}
+
 for (const [path, heading, title] of routes) {
   test(`server-renders ${path}`, async () => {
     const app = await worker();
@@ -67,6 +74,38 @@ test("server-renders the scroll telemetry as non-interactive decoration", async 
   assert.match(html, /Research\. Validate\. Execute\./i);
 });
 
+test("keeps the rendered header and home-page CTA destinations intact", async () => {
+  const app = await worker();
+  const response = await app.fetch(
+    new Request("http://localhost/", { headers: { accept: "text/html" } }),
+    env(),
+    context,
+  );
+  const anchors = renderedAnchors(await response.text());
+  const expectedLinks = [
+    ["QuantStation", "/"],
+    ["Pricing", "/pricing"],
+    ["Security", "/security"],
+    ["Contact", "/contact"],
+    ["Request access", "/contact?intent=access"],
+    ["Explore platform", "/platform"],
+    ["Explore security", "/security"],
+    ["Compare all plans", "/pricing"],
+    ["Talk to us", "/contact"],
+  ];
+
+  for (const [label, href] of expectedLinks) {
+    assert.ok(
+      anchors.some((anchor) => anchor.href === href && anchor.text.includes(label)),
+      `expected rendered link "${label}" to point to ${href}`,
+    );
+  }
+  assert.ok(
+    anchors.every(({ href }) => href === "#main-content" || (href && !href.startsWith("#"))),
+    "every rendered navigation anchor needs a destination",
+  );
+});
+
 test("server-renders authentic app UI showcases without embedding the app runtime", async () => {
   const app = await worker();
   const response = await app.fetch(
@@ -78,7 +117,7 @@ test("server-renders authentic app UI showcases without embedding the app runtim
   assert.match(html, /QuantStation Research workspace interface/i);
   assert.match(html, /Quant workspace[\s\S]*Workspaces[\s\S]*Desktop online[\s\S]*Quant trader[\s\S]*Run Context[\s\S]*Project Source/i);
   assert.match(html, /Collapse rail[\s\S]*Run Context[\s\S]*Compute Backend[\s\S]*Backtest Control[\s\S]*Out-of-sample equity[\s\S]*\+\$42,840[\s\S]*Completed[\s\S]*Backtest Queue[\s\S]*1,284 trades/i);
-  assert.match(html, /Chart 01[\s\S]*15 min[\s\S]*Market depth[\s\S]*Order entry[\s\S]*Orders &amp; fills[\s\S]*Risk rules[\s\S]*Smart orders[\s\S]*Alerts[\s\S]*Hotkeys[\s\S]*Strategy session[\s\S]*Recordings/i);
+  assert.match(html, /Chart 01[\s\S]*15 sec[\s\S]*Market depth[\s\S]*Order entry[\s\S]*Orders &amp; fills[\s\S]*Risk rules[\s\S]*Smart orders[\s\S]*Alerts[\s\S]*Hotkeys[\s\S]*Strategy session[\s\S]*Recordings/i);
   assert.match(html, /Report library[\s\S]*EMA Cross v1[\s\S]*Import JSON[\s\S]*Run quality/i);
   assert.match(html, /Data[\s\S]*Strategy[\s\S]*Backtest[\s\S]*Pipeline[\s\S]*Validate[\s\S]*Results[\s\S]*AI Assistant/i);
   assert.match(html, /Periodical analysis[\s\S]*Settings &amp; diagnostics[\s\S]*Raw JSON[\s\S]*Prop simulation/i);
@@ -135,4 +174,31 @@ test("silently accepts honeypot spam without touching storage", async () => {
   );
   assert.equal(response.status, 201);
   assert.deepEqual(await response.json(), { ok: true });
+});
+
+test("rejects malformed and oversized contact requests at the worker boundary", async () => {
+  const app = await worker();
+  const malformed = await app.fetch(
+    new Request("http://localhost/api/contact", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: "{ malformed",
+    }),
+    env(),
+    context,
+  );
+  assert.equal(malformed.status, 400);
+  assert.deepEqual(await malformed.json(), { error: "Please submit valid form data." });
+
+  const oversized = await app.fetch(
+    new Request("http://localhost/api/contact", {
+      method: "POST",
+      headers: { "content-type": "application/json", "content-length": "12001" },
+      body: JSON.stringify({ name: "Ada Lovelace", email: "ada@example.com", interest: "General", message: "A valid context." }),
+    }),
+    env(),
+    context,
+  );
+  assert.equal(oversized.status, 413);
+  assert.deepEqual(await oversized.json(), { error: "The request is too large." });
 });
