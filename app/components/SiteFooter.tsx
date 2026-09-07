@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Brand } from "./Brand";
+import { legalIdentity, legalLinks } from "../lib/legal";
 
 const footerGroups = [
   { title: "Platform", links: [["Research", "/platform#research"], ["Backtesting", "/platform#backtesting"], ["Execution", "/platform#execution"], ["Reports", "/platform#reports"]] },
@@ -24,9 +25,12 @@ export function SiteFooter() {
         ))}
       </div>
       <div className="container footer-bottom">
-        <span>© 2026 QuantStation</span>
+        <span>© 2026 {legalIdentity.company}</span>
         <span>Trading involves risk. Simulated and backtested results do not guarantee future performance.</span>
       </div>
+      <nav className="container footer-legal" aria-label="Legal">
+        {legalLinks.map(({ label, href }) => <Link href={href} key={href}>{label}</Link>)}
+      </nav>
     </footer>
   );
 }

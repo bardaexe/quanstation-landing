@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import Link from "next/link";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
@@ -50,6 +51,7 @@ export function ContactForm({ defaultInterest = "General" }: { defaultInterest?:
       </div>
       <label>Tell us about your workflow<textarea name="message" maxLength={2000} rows={6} placeholder="Strategies, markets, execution setup, or the problem you want to solve…" required /></label>
       <label className="honeypot" aria-hidden="true">Website<input name="website" tabIndex={-1} autoComplete="off" /></label>
+      <p className="form-privacy">Barda Developments (dba, QuantStation) uses these details to respond to your request. Read our <Link href="/privacy">Privacy Policy</Link>. Please do not include passwords, broker keys, or payment-card details.</p>
       <div className="form-submit">
         <button className="button button-light" disabled={state === "submitting"} type="submit">
           {state === "submitting" ? "Saving request…" : "Send request"}
