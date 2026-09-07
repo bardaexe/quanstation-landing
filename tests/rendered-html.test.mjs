@@ -11,6 +11,9 @@ const routes = [
   ["/security", /clear trust boundaries/i, /Security — QuantStation/i],
   ["/resources", /Clarity before complexity/i, /Resources — QuantStation/i],
   ["/contact", /Tell us what you’re building toward/i, /Contact — QuantStation/i],
+  ["/privacy", /What stays local and what goes online/i, /Privacy Policy — QuantStation/i],
+  ["/terms", /Cancellation and 14-day refunds/i, /Terms of Service — QuantStation/i],
+  ["/cookies", /Desktop storage inventory/i, /Cookie Policy — QuantStation/i],
 ];
 
 async function worker() {
@@ -140,7 +143,9 @@ test("keeps the motion runtime and client assets within performance budgets", as
 
   assert.ok(compressedSize(motionSource) <= 3_072, "MotionSystem exceeded 3 KiB Brotli");
   assert.ok(javascript.reduce((total, contents) => total + compressedSize(contents), 0) <= 98_304, "client JavaScript exceeded 96 KiB Brotli");
-  assert.ok(stylesheets.reduce((total, contents) => total + compressedSize(contents), 0) <= 15_360, "stylesheets exceeded 15 KiB Brotli");
+  // Vinext combines route CSS. Reserve 1 KiB for the three shared legal-page
+  // layouts, mobile navigation, and print styles; keep JS budgets unchanged.
+  assert.ok(stylesheets.reduce((total, contents) => total + compressedSize(contents), 0) <= 16_384, "stylesheets exceeded 16 KiB Brotli");
   assert.match(motionSource.toString(), /IntersectionObserver/);
   assert.match(motionSource.toString(), /requestAnimationFrame/);
   assert.doesNotMatch(motionSource.toString(), /setInterval/);

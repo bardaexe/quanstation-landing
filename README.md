@@ -19,6 +19,13 @@ The public website is deliberately isolated from the QuantStation desktop and ba
 - `/security` — local-first and trusted execution architecture
 - `/resources` — guides, integrations, and FAQ
 - `/contact` — persisted product, plan, security, and partnership inquiries
+- `/privacy` — Privacy Policy for the website, desktop, and connected services
+- `/terms` — Terms of Service, including cancellation and 14-day subscription refunds
+- `/cookies` — Cookie Policy and desktop storage / monitoring disclosure
+
+Legal identity and revision dates are maintained in `app/lib/legal.ts`. See
+`docs/legal-policy-review.md` for the source inventory and operational items to
+resolve before publishing or accepting purchases under these policies.
 
 ## Development and deployment
 

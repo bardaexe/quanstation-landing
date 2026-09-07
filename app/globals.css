@@ -1,3 +1,15 @@
+.footer-legal { display: flex; flex-wrap: wrap; gap: 12px 24px; padding-top: 4px; padding-bottom: 28px; color: #aaaab4; font-size: 12px; }
+.footer-legal a:hover { color: var(--foreground); }
+.footer-legal a:focus-visible, .form-privacy a:focus-visible { outline: 2px solid var(--foreground); outline-offset: 4px; }
+.form-privacy { color: #aaaab4; font-size: 12px; line-height: 1.7; }
+.form-privacy a { color: var(--foreground); text-decoration: underline; text-underline-offset: 3px; }
+body:has(.legal-document) .scroll-progress { display: none; }
+@media print {
+  body:has(.legal-document), html:has(.legal-document) { background: white !important; color: black !important; color-scheme: light; }
+  body:has(.legal-document)::before { display: none; }
+  body:has(.legal-document) :is(.site-header, .site-footer, .skip-link, .scroll-progress) { display: none !important; }
+}
+
 :root {
   --background: #000;
   --surface-1: #030303;
